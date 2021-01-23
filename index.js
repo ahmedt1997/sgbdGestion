@@ -1,29 +1,19 @@
 const mongoose = require('mongoose')
+const matier = require('./Route/matier')
+const express = require('express')
 
 mongoose.connect('mongodb://localhost/sgbd')
 .then(() => console.log('connected to Mongodb ...'))
 .catch(err => console.error('could not connect to Mongodb',error))
 
-// 1 la declaration du schema 
+const app = express()
+app.use(express.json())
 
-const MatierSchema = new mongoose.Schema({
-    name:String
-})
 
-// 2 la creation de la classe 
+app.use('/api/matier',matier); 
 
-const Matier = mongoose.model('Matier',MatierSchema)
+const port = process.env.PORT || 3000
 
-//3 la creation de l'objet 
-
-async function CreateMatier(){
-    const matier = new Matier({
-        name:"Programmation"
-    })
-    
-    const result = await matier.save()
-    console.log(result)
-}
-
-CreateMatier();
+const server = app.listen(port , () => console.log('listening '))
+module.exports=server
 
